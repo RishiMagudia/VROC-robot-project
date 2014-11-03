@@ -18,7 +18,7 @@ def initTurtle():
     turtle1.setpos(0,-250)
     for x in range(0,300,50):
         turtle1.circle(x,None,6)
-    
+        print turtle1.pos()
  
 def changeDifficulty(difficulty):
     print difficulty
