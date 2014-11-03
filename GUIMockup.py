@@ -1,14 +1,24 @@
 from Tkinter import *
+import turtle
 
 #defining generic variables here
-windowSize = 50 #aspect ratio is 16:0
+windowSize = 50 #aspect ratio is 16:10
 
 
 #creating the canvas//main window
 window = Tk()
+#window.withdraw()
 canvas = Canvas(window,width=windowSize*16,height=windowSize*9,bg='white')
 canvas.pack(side=TOP,pady=10)
 window.wm_title("GUI Mockup")
+
+def initTurtle():
+    turtle1 = turtle.RawTurtle(canvas)
+    turtle1.shape("turtle")
+    turtle1.setpos(0,-250)
+    for x in range(0,300,50):
+        turtle1.circle(x,None,6)
+    
  
 def changeDifficulty(difficulty):
     print difficulty
@@ -51,4 +61,5 @@ def initButtons():
     startStopResetFrame.pack(side=RIGHT)
 
 initButtons()
+initTurtle()
 window.mainloop()
