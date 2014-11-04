@@ -1,30 +1,58 @@
 from Tkinter import *
+import time
 import turtle
 
-#defining generic variables here
+#defining generic/ variables here
 windowSize = 50 #aspect ratio is 16:10
-
 
 #creating the canvas//main window
 window = Tk()
 #window.withdraw()
-canvas = Canvas(window,width=windowSize*16,height=windowSize*9,bg='white')
+canvas = Canvas(window,width=windowSize*16,height=windowSize*9,bg='blue')
 canvas.pack(side=TOP,pady=10)
 window.wm_title("GUI Mockup")
 
-def initTurtle():
-    turtle1 = turtle.RawTurtle(canvas)
-    turtle1.shape("turtle")
-    turtle1.setpos(0,-250)
-    for x in range(0,300,50):
-        turtle1.circle(x,None,6)
-        print turtle1.pos()
+#global variables go here
+startTime = 0
+currentDifficulty = ''
+
+def initRobot():
+    robot = turtle.RawTurtle(canvas)
+    robot.shape("turtle")
  
 def changeDifficulty(difficulty):
-    print difficulty
+    global currentDifficulty
+    currentDifficulty = difficulty
+    print currentDifficulty
+
+def hasRobotTimedOut():
+    global startTime
+    checkTime = time.time()
+    runningTime = checkTime - startTime
+    print runningTime
+    if (runningTime > 30.0):
+        return True
+    else:
+        return False
 
 def changeTimescale(timescale):
-    print timescale
+    global startTime
+    global currentDifficulty
+    
+    if (timescale == "start"):
+        startTime = time.time()
+        if (currentDifficulty == "basic"):
+            print ''
+        if (currentDifficulty == "intermediate"):
+            print ''
+        if (currentDifficulty == "complex"):
+            print ''
+            
+    if (timescale == "stop"):
+        print hasRobotTimedOut()
+        
+    if (timescale == 'reset'):
+        print ''
  
 def initButtons():
     #buttons indicating difficulty
@@ -61,5 +89,5 @@ def initButtons():
     startStopResetFrame.pack(side=RIGHT)
 
 initButtons()
-initTurtle()
+initRobot()
 window.mainloop()
