@@ -2,23 +2,78 @@ from Tkinter import *
 import time
 import turtle
 
+
 #defining generic/ variables here
 windowSize = 50 #aspect ratio is 16:10
 
 #creating the canvas//main window
 window = Tk()
 #window.withdraw()
-canvas = Canvas(window,width=windowSize*16,height=windowSize*9,bg='blue')
+canvas = Canvas(window,width=windowSize*16,height=windowSize*9,bg='white')
 canvas.pack(side=TOP,pady=10)
 window.wm_title("GUI Mockup")
 
 #global variables go here
 startTime = 0
 currentDifficulty = ''
+robot = turtle.RawTurtle(canvas)
+
+class Cood(object):
+    """represent a coordinate point"""
+
+    def __init__(self,x,y):
+        self.X = x
+        self.Y = y
+
+    def getX(self):
+        return self.X
+
+    def getY(self):
+        return self.Y
+
+def moveRobot(distance):
+    robot.fd(distance)
+
+def turnRobot(angle):
+    turtle.seth(0)
+    turtle.circle(1,angle)
+
+def calculateMainLine(startcood,endcood):
+    lineGradient = float((endCood.Y-startcood.Y)/(endcood.X-startcood.X))
+    mainLineC = startcood.Y - (lineGradient*startcood.X)
+    mainLineYIntercept = startcood.Y - mainLineC
+    return lineGradient,mainLineYIntercept
+    
+
+def scanner(self): #needs editing to match functions
+    x1,y1,x2,y2=canvas.coords(id1)
+    if y1>(Oby1-10)and y1<(Obx1+10)and x1>Obx1 and x1<Obx2:
+        print "Object ahead"
+    #Detect left side of object
+    if x2>(Obx1 - 10) and x2<(Obx1+10) and y1< Oby1 and y1>Oby2:
+        print "Object detected left side"
+    #Detect right side of object
+    if x1<(Obx2 + 10) and x1>(Obx2 - 10) and y1< Oby1 and y1>Oby2:
+        print "Object detected right side"
+    #Detect top of object
+    if y1>(Oby2 - 10) and y1<(Oby2+10) and x1>Obx1 and x1<Obx2:
+        print "Object detected top of object"
+    if x1>= x_max:
+        vx = -10.0
+    if y1 <= y_min:
+        vy = 5.0
+    if y2 >= y_max:
+        vy = -5.0
+    if x1 <= x_min:
+        vx = 10.0
+    canvas.coords(id1,x1+vx,y1+vy,x2+vx,y2+vy)
+    canvas.update()
+    time.sleep(0.1)
 
 def initRobot():
-    robot = turtle.RawTurtle(canvas)
+    global robot
     robot.shape("turtle")
+    robot.speed(1)
  
 def changeDifficulty(difficulty):
     global currentDifficulty
@@ -35,6 +90,15 @@ def hasRobotTimedOut():
     else:
         return False
 
+def basicArena():
+    print 'tbc'
+
+def intermediateArena():
+    print 'tbc'
+
+def complexArena():
+    print 'tbc'
+
 def changeTimescale(timescale):
     global startTime
     global currentDifficulty
@@ -42,17 +106,19 @@ def changeTimescale(timescale):
     if (timescale == "start"):
         startTime = time.time()
         if (currentDifficulty == "basic"):
-            print ''
+            basicArena()
+            
         if (currentDifficulty == "intermediate"):
-            print ''
+            intermediateArena()
+            
         if (currentDifficulty == "complex"):
-            print ''
+            complexArena()
             
     if (timescale == "stop"):
-        print hasRobotTimedOut()
+        print 'stop'
         
     if (timescale == 'reset'):
-        print ''
+        print 'reset'
  
 def initButtons():
     #buttons indicating difficulty
@@ -70,7 +136,6 @@ def initButtons():
     complexDiffButton.pack(side=LEFT)
  
     difficultyButtonFrame.pack(side=LEFT)
- 
  
     #Start/Stop/Reset button
     startStopResetFrame = Frame(window)
