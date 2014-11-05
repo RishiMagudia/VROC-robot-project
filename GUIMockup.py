@@ -11,7 +11,7 @@ window = Tk()
 #window.withdraw()
 canvas = Canvas(window,width=windowSize*16,height=windowSize*9,bg='white')
 canvas.pack(side=TOP,pady=10)
-window.wm_title("GUI Mockup")
+window.wm_title("VROC Group A3")
 
 #global variables go here
 startTime = 0
@@ -90,17 +90,19 @@ def hasRobotTimedOut():
         return False
 
 def basicArena():
+    robot.clear()
     #Setting up where the robot is
     robot.speed(0)
     robot.seth(90)
     robot.pu()
-    robot.setpos(0,-200)
+    robot.setpos(0,-150)
     robot.speed(1)
 
     #setting up the obstacle
     canvas.create_rectangle(-50,-50,50,50)
-    while robot.ycor() <> 180: #temporary goal state
-        moveRobot(10)
+    while robot.ycor() < 180: #temporary goal state
+        robot.fd(10)
+        print robot.ycor()
 
 
 def intermediateArena():
@@ -166,4 +168,7 @@ def initButtons():
 
 initButtons()
 initRobot()
+while currentDifficulty=='':
+    robot.setpos(0,0)
+    robot.circle(50,100,10)
 window.mainloop()
