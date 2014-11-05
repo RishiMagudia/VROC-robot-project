@@ -35,15 +35,14 @@ def moveRobot(distance):
     robot.fd(distance)
 
 def turnRobot(angle):
-    turtle.seth(0)
-    turtle.circle(1,angle)
+    robot.seth(0)
+    robot.circle(10,angle)
 
 def calculateMainLine(startcood,endcood):
     lineGradient = float((endCood.Y-startcood.Y)/(endcood.X-startcood.X))
     mainLineC = startcood.Y - (lineGradient*startcood.X)
     mainLineYIntercept = startcood.Y - mainLineC
     return lineGradient,mainLineYIntercept
-    
 
 def scanner(self): #needs editing to match functions
     x1,y1,x2,y2=canvas.coords(id1)
@@ -91,7 +90,18 @@ def hasRobotTimedOut():
         return False
 
 def basicArena():
-    print 'tbc'
+    #Setting up where the robot is
+    robot.speed(0)
+    robot.seth(90)
+    robot.pu()
+    robot.setpos(0,-200)
+    robot.speed(1)
+
+    #setting up the obstacle
+    canvas.create_rectangle(-50,-50,50,50)
+    while robot.ycor() <> 180: #temporary goal state
+        moveRobot(10)
+
 
 def intermediateArena():
     print 'tbc'
@@ -104,6 +114,7 @@ def changeTimescale(timescale):
     global currentDifficulty
     
     if (timescale == "start"):
+        print 'start'
         startTime = time.time()
         if (currentDifficulty == "basic"):
             basicArena()
