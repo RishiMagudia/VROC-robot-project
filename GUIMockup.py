@@ -1,12 +1,13 @@
 from Tkinter import *
 import time
 import turtle
+import random
 
 
-#defining generic/ variables here
+#defining generic/variables here
 windowSize = 50 #aspect ratio is 16:10
 
-#creating the canvas//main window
+#creating the canvas/main window
 window = Tk()
 #window.withdraw()
 canvas = Canvas(window,width=windowSize*16,height=windowSize*9,bg='white')
@@ -43,7 +44,7 @@ def calculateMainLine(startcood,endcood):
 
 def scanner(obstacle): #needs editing to match functions
     Obx1,Oby1,Obx2,Oby2=canvas.coords(obstacle)
-    print robot.pos()
+    #print robot.pos()
 
     #Object ahead of robot
     if robot.ycor() >(Oby1-30)and robot.ycor()<(Obx1+30) and robot.xcor()>Obx1 and robot.xcor()<Obx2:
@@ -93,6 +94,7 @@ def hasRobotTimedOut():
 def basicArena():
     traceback = 0
     robot.clear()
+    
     #Setting up where the robot is
     robot.speed(0)
     robot.seth(90)
@@ -100,18 +102,22 @@ def basicArena():
     robot.setpos(0,-150)
     robot.speed(1)
 
+    #get the direction
+    dirs = [0, 180]
+    direction = random.choice(dirs)
+    dirs.remove(direction)
+    
     #setting up the obstacle
     basicObstacle = canvas.create_rectangle(-50,-50,50,50)
-    while robot.ycor() < 180: #temporary goal state
+    while robot.ycor() < 180:
 
-            
-        if scanner (basicObstacle) == 'No object detected':
+        if scanner(basicObstacle) == 'No object detected':
             robot.seth(90)
             robot.fd(10)
             print 'no obstacle'
             
         if scanner(basicObstacle) == 'ahead':
-            robot.seth(0)
+            robot.seth(direction)
             robot.fd(10)
             traceback += 10
             
@@ -122,7 +128,7 @@ def basicArena():
             robot.fd(10)
             
         if scanner(basicObstacle) == 'top':
-            robot.seth(180)
+            robot.seth(dirs[0])
             robot.fd(traceback)
 
 
