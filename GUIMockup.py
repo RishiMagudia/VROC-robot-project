@@ -44,34 +44,33 @@ def calculateMainLine(startcood,endcood):
     mainLineYIntercept = startcood.Y - mainLineC
     return lineGradient,mainLineYIntercept
 
-def scanner(self): #needs editing to match functions
-    x1,y1,x2,y2=canvas.coords(id1)
-    if y1>(Oby1-10)and y1<(Obx1+10)and x1>Obx1 and x1<Obx2:
-        print "Object ahead"
-    #Detect left side of object
-    if x2>(Obx1 - 10) and x2<(Obx1+10) and y1< Oby1 and y1>Oby2:
+def scanner(obstacle): #needs editing to match functions
+    Obx1,Oby1,Obx2,Oby2=canvas.coords(obstacle)
+
+    #Object ahead
+    if robot.ycor()>(Oby1-30)and robot.ycor()<(Obx1+30)and robot.xcor()>Obx1 and robot.xcor()<Obx2:
+        print 'object ahead'
+        return 'ahead'
+    #Object left
+    if robot.xcor()>(Obx1 - 10) and robot.xcor()<(Obx1+10) and robot.ycor()< Oby1 and robot.ycor()>Oby2:
         print "Object detected left side"
-    #Detect right side of object
-    if x1<(Obx2 + 10) and x1>(Obx2 - 10) and y1< Oby1 and y1>Oby2:
+        return 'left'
+    #Detect right 
+    if robot.xcor()<(Obx2 + 10) and robot.xcor()>(Obx2 - 10) and robot.ycor()< Oby1 and robot.ycor()>Oby2:
         print "Object detected right side"
+        return 'right'
     #Detect top of object
-    if y1>(Oby2 - 10) and y1<(Oby2+10) and x1>Obx1 and x1<Obx2:
+    if robot.ycor()>(Oby2 - 10) and robot.ycor()<(Oby2+10) and robot.xcor()>Obx1 and robot.ycor()<Obx2:
         print "Object detected top of object"
-    if x1>= x_max:
-        vx = -10.0
-    if y1 <= y_min:
-        vy = 5.0
-    if y2 >= y_max:
-        vy = -5.0
-    if x1 <= x_min:
-        vx = 10.0
-    canvas.coords(id1,x1+vx,y1+vy,x2+vx,y2+vy)
-    canvas.update()
-    time.sleep(0.1)
+        return 'top'
+    else:
+        return 'No object detected'
+    
+
 
 def initRobot():
     global robot
-    robot.shape("turtle")
+    robot.shape("arrow")
     robot.speed(1)
  
 def changeDifficulty(difficulty):
@@ -99,10 +98,21 @@ def basicArena():
     robot.speed(1)
 
     #setting up the obstacle
-    canvas.create_rectangle(-50,-50,50,50)
+    basicObstacle = canvas.create_rectangle(-50,-50,50,50)
     while robot.ycor() < 180: #temporary goal state
-        robot.fd(10)
-        print robot.ycor()
+        if scanner (basicObstacle) == 'No object detected':
+            robot.fd(10)
+        if scanner(basicObstacle) == 'ahead':
+            robot.seth(180)
+            robot.fd(10)
+            if (robot.xcor() < -50):
+                break
+        if scanner(basicObstacle) == 'left':
+            break
+        if scanner(basicObstacle) == 'right':
+            break
+        if scanner(basicObstacle) == 'top':
+            break
 
 
 def intermediateArena():
