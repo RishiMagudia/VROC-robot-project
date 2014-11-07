@@ -47,20 +47,24 @@ def calculateMainLine(startcood,endcood):
 def scanner(obstacle): #needs editing to match functions
     Obx1,Oby1,Obx2,Oby2=canvas.coords(obstacle)
 
+    print robot.pos()
+
     #Object ahead
     if robot.ycor()>(Oby1-30)and robot.ycor()<(Obx1+30)and robot.xcor()>Obx1 and robot.xcor()<Obx2:
         print 'object ahead'
         return 'ahead'
+    
     #Object left
-    if robot.xcor()>(Obx1 - 10) and robot.xcor()<(Obx1+10) and robot.ycor()< Oby1 and robot.ycor()>Oby2:
+    if robot.xcor()>(Obx1 - 30) and robot.xcor()<(Obx1+30) and robot.ycor()< Oby1 and robot.ycor()>Oby2:
         print "Object detected left side"
         return 'left'
+    
     #Detect right 
-    if robot.xcor()<(Obx2 + 10) and robot.xcor()>(Obx2 - 10) and robot.ycor()< Oby1 and robot.ycor()>Oby2:
+    if robot.xcor()<(Oby2 + 30) and robot.xcor()>(Oby2 - 30) and robot.ycor()< Oby1 and robot.ycor()>Oby2:
         print "Object detected right side"
         return 'right'
     #Detect top of object
-    if robot.ycor()>(Oby2 - 10) and robot.ycor()<(Oby2+10) and robot.xcor()>Obx1 and robot.ycor()<Obx2:
+    if robot.ycor()>(Oby2) and robot.ycor()<(Oby2) and robot.xcor()>Obx1 and robot.ycor()>Obx2:
         print "Object detected top of object"
         return 'top'
     else:
@@ -101,16 +105,15 @@ def basicArena():
     basicObstacle = canvas.create_rectangle(-50,-50,50,50)
     while robot.ycor() < 180: #temporary goal state
         if scanner (basicObstacle) == 'No object detected':
+            robot.seth(90)
             robot.fd(10)
         if scanner(basicObstacle) == 'ahead':
-            robot.seth(180)
+            robot.seth(0)
             robot.fd(10)
-            if (robot.xcor() < -50):
-                break
         if scanner(basicObstacle) == 'left':
             break
         if scanner(basicObstacle) == 'right':
-            break
+            print 'right'
         if scanner(basicObstacle) == 'top':
             break
 
@@ -178,6 +181,7 @@ def initButtons():
 
 initButtons()
 initRobot()
+
 while currentDifficulty=='':
     robot.setpos(0,0)
     robot.circle(50,100,10)
