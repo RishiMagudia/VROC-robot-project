@@ -31,9 +31,6 @@ class Cood(object):
     def getY(self):
         return self.Y
 
-def moveRobot(distance):
-    robot.fd(distance)
-
 def turnRobot(angle):
     robot.seth(0)
     robot.circle(10,angle)
@@ -46,27 +43,28 @@ def calculateMainLine(startcood,endcood):
 
 def scanner(obstacle): #needs editing to match functions
     Obx1,Oby1,Obx2,Oby2=canvas.coords(obstacle)
-
     print robot.pos()
 
-    #Object ahead
-    if robot.ycor()>(Oby1-30)and robot.ycor()<(Obx1+30)and robot.xcor()>Obx1 and robot.xcor()<Obx2:
+    #Object ahead of robot
+    if robot.ycor() >(Oby1-30)and robot.ycor()<(Obx1+30) and robot.xcor()>Obx1 and robot.xcor()<Obx2:
         print 'object ahead'
         return 'ahead'
-    
-    #Object left
-    if robot.xcor()>(Obx1 - 30) and robot.xcor()<(Obx1+30) and robot.ycor()< Oby1 and robot.ycor()>Oby2:
-        print "Object detected left side"
+
+    #Object left of robot
+    if robot.xcor() < (Obx2+30) and robot.xcor() > (Obx2-30) and robot.ycor() > Oby1 and robot.ycor() < Oby2:
+        print 'left'
         return 'left'
-    
-    #Detect right 
-    if robot.xcor()<(Oby2 + 30) and robot.xcor()>(Oby2 - 30) and robot.ycor()< Oby1 and robot.ycor()>Oby2:
-        print "Object detected right side"
+
+    #Object right of robot
+    if robot.xcor() > Obx1-30 and robot.xcor() < Obx1+30 and robot.ycor() > Oby1 and robot.ycor() < Oby2:
+        print 'right'
         return 'right'
-    #Detect top of object
-    if robot.ycor()>(Oby2) and robot.ycor()<(Oby2) and robot.xcor()>Obx1 and robot.ycor()>Obx2:
+    
+    #Top of obstacle
+    if robot.ycor()>(50) and (robot.xcor()>50 or robot.xcor()<-50):
         print "Object detected top of object"
         return 'top'
+
     else:
         return 'No object detected'
     
@@ -93,6 +91,7 @@ def hasRobotTimedOut():
         return False
 
 def basicArena():
+    traceback = 0
     robot.clear()
     #Setting up where the robot is
     robot.speed(0)
@@ -104,18 +103,27 @@ def basicArena():
     #setting up the obstacle
     basicObstacle = canvas.create_rectangle(-50,-50,50,50)
     while robot.ycor() < 180: #temporary goal state
+
+            
         if scanner (basicObstacle) == 'No object detected':
             robot.seth(90)
             robot.fd(10)
+            print 'no obstacle'
+            
         if scanner(basicObstacle) == 'ahead':
             robot.seth(0)
             robot.fd(10)
+            traceback += 10
+            
         if scanner(basicObstacle) == 'left':
-            break
+            robot.fd(10)
+            
         if scanner(basicObstacle) == 'right':
-            print 'right'
+            robot.fd(10)
+            
         if scanner(basicObstacle) == 'top':
-            break
+            robot.seth(180)
+            robot.fd(traceback)
 
 
 def intermediateArena():
