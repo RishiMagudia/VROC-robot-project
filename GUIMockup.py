@@ -9,15 +9,21 @@ windowSize = 50 #aspect ratio is 16:10
 
 #creating the canvas/main window
 window = Tk()
-#window.withdraw()
 canvas = Canvas(window,width=windowSize*16,height=windowSize*9,bg='white')
 canvas.pack(side=TOP,pady=10)
+
 window.wm_title("VROC Group A3")
 
 #global variables go here
+simulationRunning = False
 startTime = 0
 currentDifficulty = ''
-robot = turtle.RawTurtle(canvas)
+objectsToDelete = []
+countdownTime = StringVar()
+
+robot1 = turtle.RawTurtle(canvas)
+robot2 = turtle.RawTurtle(canvas)
+
 
 class Cood(object):
     """represent a coordinate point"""
@@ -42,65 +48,85 @@ def calculateMainLine(startcood,endcood):
     mainLineYIntercept = startcood.Y - mainLineC
     return lineGradient,mainLineYIntercept
 
-def scanner(obstacle): #needs editing to match functions
+def scanner(robot,obstacle): #needs editing to match functions
     Obx1,Oby1,Obx2,Oby2=canvas.coords(obstacle)
     #print robot.pos()
 
     #Object ahead of robot
-    if robot.ycor() >(Oby1-30)and robot.ycor()<(Obx1+30) and robot.xcor()>Obx1 and robot.xcor()<Obx2:
-        print 'object ahead'
+    if robot.ycor() >(Oby1-40)and robot.ycor()<(Obx1+40) and robot.xcor()>Obx1 and robot.xcor()<Obx2:
+        #print 'object ahead'
         return 'ahead'
 
     #Object left of robot
-    if robot.xcor() < (Obx2+30) and robot.xcor() > (Obx2-30) and robot.ycor() > Oby1 and robot.ycor() < Oby2:
-        print 'left'
+    if robot.xcor() < (Obx2+40) and robot.xcor() > (Obx2-40) and robot.ycor() > Oby1 and robot.ycor() < Oby2:
+        #print 'left'
         return 'left'
 
     #Object right of robot
-    if robot.xcor() > Obx1-30 and robot.xcor() < Obx1+30 and robot.ycor() > Oby1 and robot.ycor() < Oby2:
-        print 'right'
+    if robot.xcor() > (Obx1-40) and robot.xcor() < (Obx1+40) and robot.ycor() > Oby1 and robot.ycor() < Oby2:
+        #print 'right'
         return 'right'
     
     #Top of obstacle
     if robot.ycor()>(50) and (robot.xcor()>50 or robot.xcor()<-50):
-        print "Object detected top of object"
+        #print "Object detected top of object"
         return 'top'
 
     else:
+        #print 'No Object detected'
         return 'No object detected'
-    
-
 
 def initRobot():
-    global robot
-    robot.shape("arrow")
-    robot.speed(1)
- 
+
+    robot1.reset()
+    robot2.reset()
+
+    robot1.shape("arrow")
+    robot1.speed(1)
+
+    robot2.shape("turtle")
+    robot2.speed(1)
+
+    robot1.ht()
+    robot2.ht()
+
+    robot1.penup()
+    robot2.penup()
+
 def changeDifficulty(difficulty):
     global currentDifficulty
     currentDifficulty = difficulty
     print currentDifficulty
 
-def hasRobotTimedOut():
+def hasRobotTimedOut(): #function also updates timer
     global startTime
+    global countdownTime
+
     checkTime = time.time()
     runningTime = checkTime - startTime
-    print runningTime
+
+    tempStrToShorten = str(30-runningTime) #truncating the time to a reasonable number of digits
+    tempStrToShorten = tempStrToShorten [0:5]
+    countdownTime.set(tempStrToShorten) #updating the label
+
     if (runningTime > 30.0):
         return True
     else:
         return False
 
 def basicArena():
+    global objectsToDelete
+
     traceback = 0
-    robot.clear()
+    robot1.clear()
+    robot1.st()
     
     #Setting up where the robot is
-    robot.speed(0)
-    robot.seth(90)
-    robot.pu()
-    robot.setpos(0,-150)
-    robot.speed(1)
+    robot1.speed(0)
+    robot1.seth(90)
+    robot1.pu()
+    robot1.setpos(0,-150)
+    robot1.speed(1)
 
     #get the direction
     dirs = [0, 180]
@@ -109,28 +135,35 @@ def basicArena():
     
     #setting up the obstacle
     basicObstacle = canvas.create_rectangle(-50,-50,50,50)
-    while robot.ycor() < 180:
+    objectsToDelete.append(basicObstacle)
 
-        if scanner(basicObstacle) == 'No object detected':
-            robot.seth(90)
-            robot.fd(10)
-            print 'no obstacle'
-            
-        if scanner(basicObstacle) == 'ahead':
-            robot.seth(direction)
-            robot.fd(10)
+    while robot1.ycor() < 180:
+
+        hasRobotTimedOut()
+
+        if scanner(robot1,basicObstacle) == 'No object detected':
+            hasRobotTimedOut()
+            robot1.seth(90)
+            robot1.fd(10)
+
+        if scanner(robot1,basicObstacle) == 'ahead':
+            hasRobotTimedOut()
+            robot1.seth(direction)
+            robot1.fd(10)
             traceback += 10
             
-        if scanner(basicObstacle) == 'left':
-            robot.fd(10)
+        if scanner(robot1,basicObstacle) == 'left':
+            hasRobotTimedOut()
+            robot1.fd(10)
             
-        if scanner(basicObstacle) == 'right':
-            robot.fd(10)
+        if scanner(robot1,basicObstacle) == 'right':
+            hasRobotTimedOut()
+            robot1.fd(10)
             
-        if scanner(basicObstacle) == 'top':
-            robot.seth(dirs[0])
-            robot.fd(traceback)
-
+        if scanner(robot1,basicObstacle) == 'top':
+            hasRobotTimedOut()
+            robot1.seth(dirs[0])
+            robot1.fd(traceback)
 
 def intermediateArena():
     print 'tbc'
@@ -138,12 +171,28 @@ def intermediateArena():
 def complexArena():
     print 'tbc'
 
+def clearArena():
+    global objectsToDelete
+
+    for x in range(0,len(objectsToDelete)):
+        canvas.delete(objectsToDelete[x])
+
+    objectsToDelete = []
+
 def changeTimescale(timescale):
     global startTime
     global currentDifficulty
-    
+    global simulationRunning
+
+    robot1.reset()
+
     if (timescale == "start"):
         print 'start'
+
+        clearArena()
+
+        robot1.st()
+        simulationRunning = True
         startTime = time.time()
         if (currentDifficulty == "basic"):
             basicArena()
@@ -156,11 +205,22 @@ def changeTimescale(timescale):
             
     if (timescale == "stop"):
         print 'stop'
+
+        clearArena()
+
+        robot1.reset()
+        robot2.reset()
+
+        initRobot()
+
+        simulationRunning = False
         
     if (timescale == 'reset'):
         print 'reset'
  
 def initButtons():
+    global countdownTime
+
     #buttons indicating difficulty
     difficultyButtonFrame = Frame(window)
  
@@ -176,12 +236,17 @@ def initButtons():
     complexDiffButton.pack(side=LEFT)
  
     difficultyButtonFrame.pack(side=LEFT)
- 
+
+    #countdownTimer
+    countDownTimer = Label(window,textvariable=countdownTime,font=("",18),padx=220)
+    countdownTime.set("30:00")
+    countDownTimer.pack(side=LEFT)
+
     #Start/Stop/Reset button
     startStopResetFrame = Frame(window)
 
     startStopResetLabel = Label(startStopResetFrame,text="Timescale of simulation")
-    startStopResetLabel.pack(side=TOP)
+    startStopResetLabel.pack()
 
     startButton = Button(startStopResetFrame,padx=10,text = "Start",command = lambda: changeTimescale('start'))
     stopButton = Button(startStopResetFrame,padx=10,text = "Stop",command = lambda: changeTimescale('stop'))
@@ -196,7 +261,4 @@ def initButtons():
 initButtons()
 initRobot()
 
-while currentDifficulty=='':
-    robot.setpos(0,0)
-    robot.circle(50,100,10)
 window.mainloop()
