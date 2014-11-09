@@ -9,7 +9,7 @@ windowSize = 50 #aspect ratio is 16:10
 
 #creating the canvas/main window
 window = Tk()
-canvas = Canvas(window,width=windowSize*16,height=windowSize*9,bg='white')
+canvas = Canvas(window,width=windowSize*16,height=windowSize*9,bg='white') #-400,-225,400,225
 canvas.pack(side=TOP,pady=10)
 
 window.wm_title("VROC Group A3")
@@ -23,7 +23,6 @@ countdownTime = StringVar()
 
 robot1 = turtle.RawTurtle(canvas)
 robot2 = turtle.RawTurtle(canvas)
-
 
 class Cood(object):
     """represent a coordinate point"""
@@ -50,6 +49,7 @@ def calculateMainLine(startcood,endcood):
 
 def scanner(robot,obstacle): #needs editing to match functions
     Obx1,Oby1,Obx2,Oby2=canvas.coords(obstacle)
+    #print Obx1,Oby1,Obx2,Oby2
     #print robot.pos()
 
     #Object ahead of robot
@@ -68,7 +68,7 @@ def scanner(robot,obstacle): #needs editing to match functions
         return 'right'
     
     #Top of obstacle
-    if robot.ycor()>(50) and (robot.xcor()>50 or robot.xcor()<-50):
+    if robot.ycor()>(Oby2) and (robot.xcor()>Obx2 or robot.xcor()<Obx1):
         #print "Object detected top of object"
         return 'top'
 
@@ -120,6 +120,7 @@ def basicArena():
     traceback = 0
     robot1.clear()
     robot1.st()
+    robot2.ht()
     
     #Setting up where the robot is
     robot1.speed(0)
@@ -169,7 +170,39 @@ def intermediateArena():
     print 'tbc'
 
 def complexArena():
-    print 'tbc'
+    robot1.clear()
+    robot1.st()
+
+    robot2.clear()
+    robot2.st()
+
+    #Setting up where the robot is
+    robot1.speed(0)
+    robot2.speed(0)
+
+    #Generating random headings
+    randomHeading = random.randint(0,360)
+    robot1.seth(randomHeading)
+    randomHeading = random.randint(0,360)
+    robot2.seth(randomHeading)
+
+    robot1.pu()
+    robot2.pu()
+
+    #Generating random startpoints, Cant spawn <100 pixels to edge
+    randomX = random.randint(-300,300)
+    randomY = random.randint(-125,125)
+    robot1.setpos(randomX,randomY)
+
+    randomX = random.randint(-300,300)
+    randomY = random.randint(-125,125)
+    robot2.setpos(randomX,randomY)
+
+    robot1.speed(1)
+    robot2.speed(1)
+
+    #print robot1.pos()
+    #print robot2.pos()
 
 def clearArena():
     global objectsToDelete

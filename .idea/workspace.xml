@@ -26,21 +26,20 @@
       <file leaf-file-name="GUIMockup.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GUIMockup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="0" selection-start="62" selection-end="62" vertical-scroll-proportion="0.110210694" vertical-offset="0" max-vertical-offset="1173">
+            <state line="123" column="4" selection-start="2986" selection-end="2986" vertical-scroll-proportion="-1.4846029" vertical-offset="1715" max-vertical-offset="2465">
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
-                <element signature="e#557#744#0" expanded="false" />
-                <element signature="e#772#812#0" expanded="false" />
-                <element signature="e#860#1078#0" expanded="false" />
-                <element signature="e#1147#2006#0" expanded="false" />
-                <element signature="e#2030#2230#0" expanded="false" />
-                <element signature="e#2270#2357#0" expanded="false" />
-                <element signature="e#2416#2811#0" expanded="false" />
-                <element signature="e#2835#4087#0" expanded="false" />
-                <element signature="e#4118#4129#0" expanded="false" />
-                <element signature="e#4155#4166#0" expanded="false" />
-                <element signature="e#4363#5118#0" expanded="false" />
-                <element signature="e#5144#6720#0" expanded="false" />
+                <element signature="e#575#762#0" expanded="false" />
+                <element signature="e#790#830#0" expanded="false" />
+                <element signature="e#878#1096#0" expanded="false" />
+                <element signature="e#1165#2060#0" expanded="false" />
+                <element signature="e#2084#2284#0" expanded="false" />
+                <element signature="e#2324#2411#0" expanded="false" />
+                <element signature="e#2470#2865#0" expanded="false" />
+                <element signature="e#4188#4199#0" expanded="false" />
+                <element signature="e#4988#5123#0" expanded="false" />
+                <element signature="e#5161#5916#0" expanded="false" />
+                <element signature="e#5942#7518#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -345,21 +344,20 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/GUIMockup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="62" selection-end="62" vertical-scroll-proportion="0.110210694" vertical-offset="0" max-vertical-offset="1173">
+        <state line="123" column="4" selection-start="2986" selection-end="2986" vertical-scroll-proportion="-1.4846029" vertical-offset="1715" max-vertical-offset="2465">
           <folding>
             <element signature="e#0#21#0" expanded="true" />
-            <element signature="e#557#744#0" expanded="false" />
-            <element signature="e#772#812#0" expanded="false" />
-            <element signature="e#860#1078#0" expanded="false" />
-            <element signature="e#1147#2006#0" expanded="false" />
-            <element signature="e#2030#2230#0" expanded="false" />
-            <element signature="e#2270#2357#0" expanded="false" />
-            <element signature="e#2416#2811#0" expanded="false" />
-            <element signature="e#2835#4087#0" expanded="false" />
-            <element signature="e#4118#4129#0" expanded="false" />
-            <element signature="e#4155#4166#0" expanded="false" />
-            <element signature="e#4363#5118#0" expanded="false" />
-            <element signature="e#5144#6720#0" expanded="false" />
+            <element signature="e#575#762#0" expanded="false" />
+            <element signature="e#790#830#0" expanded="false" />
+            <element signature="e#878#1096#0" expanded="false" />
+            <element signature="e#1165#2060#0" expanded="false" />
+            <element signature="e#2084#2284#0" expanded="false" />
+            <element signature="e#2324#2411#0" expanded="false" />
+            <element signature="e#2470#2865#0" expanded="false" />
+            <element signature="e#4188#4199#0" expanded="false" />
+            <element signature="e#4988#5123#0" expanded="false" />
+            <element signature="e#5161#5916#0" expanded="false" />
+            <element signature="e#5942#7518#0" expanded="false" />
           </folding>
         </state>
       </provider>
