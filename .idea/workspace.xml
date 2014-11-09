@@ -26,7 +26,7 @@
       <file leaf-file-name="GUIMockup.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GUIMockup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="123" column="4" selection-start="2986" selection-end="2986" vertical-scroll-proportion="-1.4846029" vertical-offset="1715" max-vertical-offset="2465">
+            <state line="145" column="45" selection-start="3623" selection-end="3623" vertical-scroll-proportion="0.5400908" vertical-offset="816" max-vertical-offset="2907">
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
                 <element signature="e#575#762#0" expanded="false" />
@@ -36,10 +36,10 @@
                 <element signature="e#2084#2284#0" expanded="false" />
                 <element signature="e#2324#2411#0" expanded="false" />
                 <element signature="e#2470#2865#0" expanded="false" />
-                <element signature="e#4188#4199#0" expanded="false" />
-                <element signature="e#4988#5123#0" expanded="false" />
-                <element signature="e#5161#5916#0" expanded="false" />
-                <element signature="e#5942#7518#0" expanded="false" />
+                <element signature="e#3682#4950#0" expanded="false" />
+                <element signature="e#4981#4992#0" expanded="false" />
+                <element signature="e#5988#6123#0" expanded="false" />
+                <element signature="e#6942#8518#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -306,18 +306,18 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.08020833" sideWeight="0.69588745" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.08020833" sideWeight="0.7435065" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.30411255" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2564935" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -344,7 +344,7 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/GUIMockup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="123" column="4" selection-start="2986" selection-end="2986" vertical-scroll-proportion="-1.4846029" vertical-offset="1715" max-vertical-offset="2465">
+        <state line="145" column="45" selection-start="3623" selection-end="3623" vertical-scroll-proportion="0.5400908" vertical-offset="816" max-vertical-offset="2907">
           <folding>
             <element signature="e#0#21#0" expanded="true" />
             <element signature="e#575#762#0" expanded="false" />
@@ -354,10 +354,10 @@
             <element signature="e#2084#2284#0" expanded="false" />
             <element signature="e#2324#2411#0" expanded="false" />
             <element signature="e#2470#2865#0" expanded="false" />
-            <element signature="e#4188#4199#0" expanded="false" />
-            <element signature="e#4988#5123#0" expanded="false" />
-            <element signature="e#5161#5916#0" expanded="false" />
-            <element signature="e#5942#7518#0" expanded="false" />
+            <element signature="e#3682#4950#0" expanded="false" />
+            <element signature="e#4981#4992#0" expanded="false" />
+            <element signature="e#5988#6123#0" expanded="false" />
+            <element signature="e#6942#8518#0" expanded="false" />
           </folding>
         </state>
       </provider>

@@ -114,6 +114,38 @@ def hasRobotTimedOut(): #function also updates timer
     else:
         return False
 
+def detectAndAvoidEdges(robot):
+    #makes sure the robot does not travel off the edge of the screen
+    xMin = -400 #allows 90 degree cone of heading
+    xMax = 400
+    yMin = -225
+    yMax = 225
+
+
+    #right
+    if robot.xcor() >= xMax:
+        print 'right wall'
+        randomHeading = random.randint(135,225)
+        robot.seth(randomHeading)
+
+    #bottom
+    if robot.ycor() <= yMin:
+        print 'bottom wall'
+        randomHeading = random.randint(45,135)
+        robot.seth(randomHeading)
+
+    #top
+    if robot.ycor() >= yMax:
+        print 'top wall'
+        randomHeading = random.randint(225,315)
+        robot.seth(randomHeading)
+
+    #left
+    if robot.xcor() <= xMin:
+        print 'left wall'
+        randomHeading = random.randint(-45,45)
+        robot.seth(randomHeading)
+
 def basicArena():
     global objectsToDelete
 
@@ -182,14 +214,14 @@ def complexArena():
 
     #Generating random headings
     randomHeading = random.randint(0,360)
-    robot1.seth(randomHeading)
+    robot1.seth(180)
     randomHeading = random.randint(0,360)
     robot2.seth(randomHeading)
 
     robot1.pu()
     robot2.pu()
 
-    #Generating random startpoints, Cant spawn <100 pixels to edge
+    #Generating random start points, Cant spawn <100 pixels to edge
     randomX = random.randint(-300,300)
     randomY = random.randint(-125,125)
     robot1.setpos(randomX,randomY)
@@ -200,6 +232,13 @@ def complexArena():
 
     robot1.speed(1)
     robot2.speed(1)
+
+    while hasRobotTimedOut() == False and currentDifficulty=='complex':
+        detectAndAvoidEdges(robot1)
+        detectAndAvoidEdges(robot2)
+        robot1.fd(10)
+        robot2.fd(10)
+        print robot1.pos()
 
     #print robot1.pos()
     #print robot2.pos()
