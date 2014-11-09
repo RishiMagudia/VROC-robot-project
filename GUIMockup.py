@@ -2,6 +2,7 @@ from Tkinter import *
 import time
 import turtle
 import random
+import math
 
 
 #defining generic/variables here
@@ -18,7 +19,7 @@ window.wm_title("VROC Group A3")
 simulationRunning = False
 startTime = 0
 currentDifficulty = ''
-objectsToDelete = []
+objectsInArena = []
 countdownTime = StringVar()
 
 robot1 = turtle.RawTurtle(canvas)
@@ -36,10 +37,6 @@ class Cood(object):
 
     def getY(self):
         return self.Y
-
-def turnRobot(angle):
-    robot.seth(0)
-    robot.circle(10,angle)
 
 def calculateMainLine(startcood,endcood):
     lineGradient = float((endCood.Y-startcood.Y)/(endcood.X-startcood.X))
@@ -121,7 +118,6 @@ def detectAndAvoidEdges(robot):
     yMin = -225
     yMax = 225
 
-
     #right
     if robot.xcor() >= xMax:
         print 'right wall'
@@ -146,8 +142,48 @@ def detectAndAvoidEdges(robot):
         randomHeading = random.randint(-45,45)
         robot.seth(randomHeading)
 
+def trafficLight():
+    print 'tbc'
+    #split the area into equal squares,currently not working
+    trafficLight = []
+
+    rows = 9
+    columns = 16
+    for x in range(rows):
+        for c in range(columns):
+            print trafficLight.append(canvas.create_rectangle(-400+(c*50),-225+(x*50),-301+(c*50),-126+(x*50)))
+
+    canvas.itemconfig(trafficLight[-4],fill="red")
+
+def complexObjectDetection(robot):
+    print 'tbc'
+    #compare to list of 
+
+def robotCollisionDetection(robot1,robot2):
+    #uses bounding circles as accuracy is not paramount
+
+    collisionRadius = 30 #If within x pixels do something
+
+    #Calculate difference between 2 centre points
+    distX = math.fabs(robot1.xcor()) - math.fabs(robot2.xcor()) #calculate absolute values
+    distY = math.fabs(robot1.ycor()) - math.fabs(robot2.ycor()) #and then minus
+
+    #Use some trig to calculate distance
+    distanceBetween = math.sqrt((distY*distY)+(distX*distX))
+
+    if distanceBetween > collisionRadius:
+        return False
+
+    if distanceBetween < collisionRadius:
+        print 'Collision Imminent!'
+        return True
+
+def randomArenaGeneration():
+    global objectsInArena
+    print 'tbc'
+
 def basicArena():
-    global objectsToDelete
+    global objectsInArena
 
     traceback = 0
     robot1.clear()
@@ -168,7 +204,7 @@ def basicArena():
     
     #setting up the obstacle
     basicObstacle = canvas.create_rectangle(-50,-50,50,50)
-    objectsToDelete.append(basicObstacle)
+    objectsInArena.append(basicObstacle)
 
     while robot1.ycor() < 180:
 
@@ -236,6 +272,8 @@ def complexArena():
     while hasRobotTimedOut() == False and currentDifficulty=='complex':
         detectAndAvoidEdges(robot1)
         detectAndAvoidEdges(robot2)
+        if robotCollisionDetection(robot1,robot2): #returns true if collision is imminent
+            print 'tbc'
         robot1.fd(10)
         robot2.fd(10)
         print robot1.pos()
@@ -244,12 +282,12 @@ def complexArena():
     #print robot2.pos()
 
 def clearArena():
-    global objectsToDelete
+    global objectsInArena
 
-    for x in range(0,len(objectsToDelete)):
-        canvas.delete(objectsToDelete[x])
+    for x in range(0,len(objectsInArena)):
+        canvas.delete([x])
 
-    objectsToDelete = []
+    objectsInArena= []
 
 def changeTimescale(timescale):
     global startTime

@@ -26,20 +26,9 @@
       <file leaf-file-name="GUIMockup.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/GUIMockup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="145" column="45" selection-start="3623" selection-end="3623" vertical-scroll-proportion="0.5400908" vertical-offset="816" max-vertical-offset="2907">
+            <state line="289" column="4" selection-start="7311" selection-end="7311" vertical-scroll-proportion="0.33282906" vertical-offset="4693" max-vertical-offset="6460">
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
-                <element signature="e#575#762#0" expanded="false" />
-                <element signature="e#790#830#0" expanded="false" />
-                <element signature="e#878#1096#0" expanded="false" />
-                <element signature="e#1165#2060#0" expanded="false" />
-                <element signature="e#2084#2284#0" expanded="false" />
-                <element signature="e#2324#2411#0" expanded="false" />
-                <element signature="e#2470#2865#0" expanded="false" />
-                <element signature="e#3682#4950#0" expanded="false" />
-                <element signature="e#4981#4992#0" expanded="false" />
-                <element signature="e#5988#6123#0" expanded="false" />
-                <element signature="e#6942#8518#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -64,6 +53,7 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/testClock.py" />
+        <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/GUIMockup.py" />
       </list>
     </option>
@@ -159,6 +149,24 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="VROC-robot-project" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/testClock.py" />
+      <option name="PARAMETERS" value="" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="VROC-robot-project" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
       <option name="PARAMETERS" value="" />
       <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
@@ -285,14 +293,16 @@
       <option name="USE_PATTERN" value="false" />
       <method />
     </configuration>
-    <list size="2">
+    <list size="3">
       <item index="0" class="java.lang.String" itemvalue="Python.GUIMockup" />
       <item index="1" class="java.lang.String" itemvalue="Python.testClock" />
+      <item index="2" class="java.lang.String" itemvalue="Python.test" />
     </list>
     <recent_temporary>
-      <list size="2">
+      <list size="3">
         <item index="0" class="java.lang.String" itemvalue="Python.GUIMockup" />
-        <item index="1" class="java.lang.String" itemvalue="Python.testClock" />
+        <item index="1" class="java.lang.String" itemvalue="Python.test" />
+        <item index="2" class="java.lang.String" itemvalue="Python.testClock" />
       </list>
     </recent_temporary>
   </component>
@@ -306,7 +316,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -338,26 +348,15 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="2" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/GUIMockup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="145" column="45" selection-start="3623" selection-end="3623" vertical-scroll-proportion="0.5400908" vertical-offset="816" max-vertical-offset="2907">
+        <state line="289" column="4" selection-start="7311" selection-end="7311" vertical-scroll-proportion="0.33282906" vertical-offset="4693" max-vertical-offset="6460">
           <folding>
             <element signature="e#0#21#0" expanded="true" />
-            <element signature="e#575#762#0" expanded="false" />
-            <element signature="e#790#830#0" expanded="false" />
-            <element signature="e#878#1096#0" expanded="false" />
-            <element signature="e#1165#2060#0" expanded="false" />
-            <element signature="e#2084#2284#0" expanded="false" />
-            <element signature="e#2324#2411#0" expanded="false" />
-            <element signature="e#2470#2865#0" expanded="false" />
-            <element signature="e#3682#4950#0" expanded="false" />
-            <element signature="e#4981#4992#0" expanded="false" />
-            <element signature="e#5988#6123#0" expanded="false" />
-            <element signature="e#6942#8518#0" expanded="false" />
           </folding>
         </state>
       </provider>
