@@ -283,11 +283,11 @@ def complexArena():
 
 def clearArena():
     global objectsInArena
+    print objectsInArena
 
     for x in range(0,len(objectsInArena)):
-        canvas.delete([x])
+        canvas.delete(objectsInArena[x])
 
-    objectsInArena= []
 
 def changeTimescale(timescale):
     global startTime
