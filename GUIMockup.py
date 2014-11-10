@@ -13,6 +13,7 @@ window = Tk()
 canvas = Canvas(window,width=windowSize*16,height=windowSize*9,bg='white') #-400,-225,400,225
 canvas.pack(side=TOP,pady=10)
 
+window.resizable(0,0)
 window.wm_title("VROC Group A3")
 
 #global variables go here
@@ -113,10 +114,10 @@ def hasRobotTimedOut(): #function also updates timer
 
 def detectAndAvoidEdges(robot):
     #makes sure the robot does not travel off the edge of the screen
-    xMin = -400 #allows 90 degree cone of heading
-    xMax = 400
-    yMin = -225
-    yMax = 225
+    xMin = -385 #allows 90 degree cone of heading
+    xMax = 385
+    yMin = -210
+    yMax = 210
 
     #right
     if robot.xcor() >= xMax:
