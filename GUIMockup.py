@@ -22,6 +22,10 @@ startTime = 0
 currentDifficulty = ''
 objectsInArena = []
 countdownTime = StringVar()
+object_location_left = False
+object_location_right = False
+robot_on_main_line = False
+
 
 robot1 = turtle.RawTurtle(canvas)
 robot2 = turtle.RawTurtle(canvas)
@@ -182,6 +186,75 @@ def robotCollisionDetection(robot1,robot2):
 def randomArenaGeneration():
     global objectsInArena
     print 'tbc'
+
+#Will's code
+
+def detect():
+    global object_location_left
+    global object_location_right
+    if scanner(robot, obstacle) == 'left':
+        object_location_left = True
+        object_location_right = False
+    elif scanner(robot, obsatacle) == 'right':
+        object_location_right = True
+        object_location_left = False
+        return object_location_left, object_location_right 
+        
+#The robot moves along the squares side until it is clear of the object. Then
+#using the variables defined earlier, the robot turns the corner. The robot then
+#moves forward so that the scanner can detect the next square side.
+
+def move_along_side():
+    global object_location_left
+    global object_location_right
+    scanner(robot,obstacle)
+    while scanner(robot,obstacle) == 'left' or scanner == 'right':
+        turtle.forward(1)
+        scanner(robot,obstacle)
+    turtle.forward(4)
+    if object_location_left == True:
+        turtle.left(90)
+    elif object_location_right == True:
+        turtle.right(90)
+    turtle.forward(6)
+
+#The robot gradient and Y-intercept are defined
+
+def robot_line(robot):
+    robot_Gradient = float((robot.ycor)/(robot.xcor))
+    robot_Y_Intercept = float((robot.ycor)/(robot.xcor)*(robot_Gradient))
+    return robot_gradient, robot_Y_Intercept
+
+#The robot gradient and Y-intercept are cross-refrenced with the mainline's. If
+#they match, the loop ends.
+
+def is_robot_on_main_line(robot,startcood,endcood):
+    global robot_on_mainline
+    calculateMainLine(startcood,endcood)
+    robot_line(robot)
+    if calculateMainline(startcood,endcood) == robot_line(robot):
+        robot_on_mainline = True
+    return robot_on_mainline
+        
+def move_around_square():
+    global robot_on_mainline
+    global object_location_left
+    global object_location_right
+    detect()
+    move_along_side()    
+    detect()
+    move_along_side()
+    #robot sees if it's on the mainline, and moves forward if not.
+    is_robot_on_main_line(robot,startcood,endcood)
+    while robot_on_mainline == False:
+        turtle.forward(1)
+        is_robot_on_main_line(robot,startcood,endcood)
+    #robot moves back in line, with the mainline
+    detect()
+    if object_location_left == True:
+        turtle.right(90)
+    elif object_location_right == True:
+        turtle.left(90)
 
 def basicArena():
     global objectsInArena
@@ -369,6 +442,8 @@ def initButtons():
 
     startStopResetFrame.pack(side=RIGHT)
 
+
+    
 initButtons()
 initRobot()
 
