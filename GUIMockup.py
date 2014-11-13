@@ -148,7 +148,7 @@ def detectAndAvoidEdges(robot):
 
 def createObstacle(row=1, column=1, colour='purple'):
     obstacles = []
-    c, x = row, column
+    x, c = row, column
     
     if row in rows and column in columns:
         x = row
@@ -163,7 +163,7 @@ def createObstacle(row=1, column=1, colour='purple'):
 
 def trafficLight(row=1, column=1, colour='red'):
     trafficLight = []
-    c, x = row, column
+    x, c = row, column
     
     if row in rows and column in columns:
         x = row
