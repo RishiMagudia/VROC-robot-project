@@ -4,6 +4,7 @@ import turtle
 import random
 import math
 
+#testing a comment
 
 #defining generic/variables here
 windowSize = 50 #aspect ratio is 16:10
@@ -147,18 +148,35 @@ def detectAndAvoidEdges(robot):
         randomHeading = random.randint(-45,45)
         robot.seth(randomHeading)
 
-def trafficLight():
-    print 'tbc'
-    #split the area into equal squares,currently not working
+def createObstacle(row=1, column=1, colour='purple'):
+    obstacles = []
+    c, x = row, column
+    
+    if row in rows and column in columns:
+        x = row
+        c = column
+        obstacles.append(x)
+        obstacles.append(c)
+    if c and x:
+        objectsInArena.append(canvas.create_rectangle(-400+(c*50),-225+(x*50),-301+(c*50),-126+(x*50), fill=colour))
+        objectsInArena.append(obstacles)
+    else:
+        print 'No coordinates to place the obstacle to.'
+
+def trafficLight(row=1, column=1, colour='red'):
     trafficLight = []
-
-    rows = 9
-    columns = 16
-    for x in range(rows):
-        for c in range(columns):
-            print trafficLight.append(canvas.create_rectangle(-400+(c*50),-225+(x*50),-301+(c*50),-126+(x*50)))
-
-    canvas.itemconfig(trafficLight[-4],fill="red")
+    c, x = row, column
+    
+    if row in rows and column in columns:
+        x = row
+        c = column
+        trafficLight.append(x)
+        trafficLight.append(c)
+    if c and x:
+        objectsInArena.append(canvas.create_oval(-400+(c*50),-225+(x*50),-301+(c*50),-126+(x*50), fill=colour))
+        objectsInArena.append(trafficLight)
+    else:
+        print 'No coordinates to place the light to.'
 
 def complexObjectDetection(robot):
     print 'tbc'
