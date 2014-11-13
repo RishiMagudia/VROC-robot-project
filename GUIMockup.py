@@ -3,6 +3,7 @@ import time
 import turtle
 import random
 import math
+import heapq
 
 #defining generic/variables here
 windowSize = 50 #aspect ratio is 16:10
@@ -24,23 +25,177 @@ countdownTime = StringVar()
 object_location_left = False
 object_location_right = False
 robot_on_main_line = False
-
+#grid
+rows = range(1,7)
+columns = range(1,14)
+#path
+path = []
 
 robot1 = turtle.RawTurtle(canvas)
 robot2 = turtle.RawTurtle(canvas)
 
-class Cood(object):
-    """represent a coordinate point"""
+class node(object):
+    def __init__(self, x, y, traversable):
+        """
+        Initialize new node
 
-    def __init__(self,x,y):
-        self.X = x
-        self.Y = y
+        @param x node x coordinate
+        @param y node y coordinate
+        @param traversable is node traversable? not a wall?
+        """
+        self.traversable = traversable
+        self.x = x
+        self.y = y
+        self.parent = None
+        self.g = 0
+        self.h = 0
+        self.f = 0
 
-    def getX(self):
-        return self.X
+class AStar(object):
+    def __init__(self):
+        self.opened = []
+        heapq.heapify(self.opened)
+        self.closed = set()
+        self.nodes = []
+        self.grid_height = 8
+        self.grid_width = 15
+        self.end_point = []
+        self.randomStartAndEndPoints = []
 
-    def getY(self):
-        return self.Y
+    def init_grid(self):
+        walls = \
+            (
+            (1,2),(1,3),(2,2),(2,3),(2,6),(2,7),(3,6),(3,7),(4,1),(4,2),(4,6),(4,7),(5,1),(5,2),(6,1),(6,2),(6,4),(6,5),(7,4),(7,5),
+            (9,2),(9,3),(9,6),(9,7),(10,2),(10,3),(10,6),(10,7),(12,1),(12,2),(12,3),(12,4),(12,5),(12,6),(13,1),(13,2),(13,3),(13,4),(13,5),(13,6)
+            )
+        for x in range(self.grid_width):
+            for y in range(self.grid_height):
+                if (x, y) in walls:
+                    traversable = False
+                else:
+                    traversable = True
+                    self.randomStartAndEndPoints.append((x,y))
+                self.nodes.append(node(x, y, traversable))
+
+        #randomising start & end positions & setting up robot
+        temp = self.randomStartAndEndPoints[random.randint(0,len(self.randomStartAndEndPoints))]
+        self.start = self.get_node(temp[0],temp[1])
+        self.end_point = [temp[0],temp[1]] #for robot
+
+        temp = self.randomStartAndEndPoints[random.randint(1,len(self.randomStartAndEndPoints)-1)]
+        self.end = self.get_node(temp[0],temp[1])
+        robot1.speed(0)
+        robot1.setpos(-375+(temp[0]*50),-200+(temp[1]*50))
+        robot1.speed(1)
+
+    def get_heuristic(self, node):
+        """
+        Compute the heuristic value H for a node: distance between
+        this node and the ending node multiply by 10.
+
+        @param node
+        @returns heuristic value H
+        """
+        return 10 * (abs(node.x - self.end.x) + abs(node.y - self.end.y))
+
+    def get_node(self, x, y):
+        """
+        Returns a node from the nodes list
+
+        @param x node x coordinate
+        @param y node y coordinate
+        @returns node
+        """
+        return self.nodes[x * self.grid_height + y]
+
+    def get_adjacent_nodes(self, node):
+        """
+        Returns adjacent nodes to a node. Clockwise starting
+        from the one on the right.
+
+        @param node get adjacent nodes for this node
+        @returns adjacent nodes list
+        """
+        nodes = []
+        if node.x < self.grid_width-1:
+            nodes.append(self.get_node(node.x+1, node.y))
+        if node.y > 0:
+            nodes.append(self.get_node(node.x, node.y-1))
+        if node.x > 0:
+            nodes.append(self.get_node(node.x-1, node.y))
+        if node.y < self.grid_height-1:
+            nodes.append(self.get_node(node.x, node.y+1))
+        return nodes
+
+    def display_path(self):
+        node = self.end
+        while node.parent is not self.start:
+            node = node.parent
+            #print 'path: node: %d,%d' % (node.x, node.y)
+            #canvas.create_rectangle(-400+(node.x*50),225-(node.y*50),-350+(node.x*50),175-(node.y*50),fill='yellow')
+            self.traverse_path(node.x,node.y)
+
+        print 'tbc'
+        #self.start = self.get_node(temp[0],temp[1])
+        #self.end_point = [temp[0],temp[1]] #for robot
+
+    def traverse_path(self,x,y):
+        robot1.goto(-375+(x*50),-200+(y*50))
+        hasRobotTimedOut()
+        print robot1.pos()
+
+    def compare(self, node1, node2):
+        """
+        Compare 2 nodes F values
+
+        @param node1 1st node
+        @param node2 2nd node
+        @returns -1, 0 or 1 if lower, equal or greater
+        """
+        if node1.f < node2.f:
+            return -1
+        elif node1.f > node2.f:
+            return 1
+        return 0
+
+    def update_node(self, adj, node):
+        """
+        Update adjacent node
+
+        @param adj adjacent node to current node
+        @param node current node being algorithmed
+        """
+        adj.g = node.g + 10
+        adj.h = self.get_heuristic(adj)
+        adj.parent = node
+        adj.f = adj.h + adj.g
+
+    def algorithm(self):
+        # add starting node to open heap queue
+        heapq.heappush(self.opened, (self.start.f, self.start))
+        while len(self.opened):
+            # pop node from heap queue
+            f, node = heapq.heappop(self.opened)
+            # add node to closed list so we don't algorithm it twice
+            self.closed.add(node)
+            # if ending node, display found path
+            if node is self.end:
+                self.display_path()
+                break
+            # get adjacent nodes for node
+            adj_nodes = self.get_adjacent_nodes(node)
+            for adj_node in adj_nodes:
+                if adj_node.traversable and adj_node not in self.closed:
+                    if (adj_node.f, adj_node) in self.opened:
+                        # if adj node in open list, check if current path is
+                        # better than the one previously found
+                        # for this adj node.
+                        if adj_node.g > node.g + 10:
+                            self.update_node(adj_node, node)
+                    else:
+                        self.update_node(adj_node, node)
+                        # add adj node to open list
+                        heapq.heappush(self.opened, (adj_node.f, adj_node))
 
 def calculateMainLine(startcood,endcood):
     lineGradient = float((endCood.Y-startcood.Y)/(endcood.X-startcood.X))
@@ -77,6 +232,22 @@ def scanner(robot,obstacle): #needs editing to match functions
         #print 'No Object detected'
         return 'No object detected'
 
+def intermediateScanner(robot):
+    for x in range(1,len(objectsInArena),2):
+        coordinates = objectsInArena[x] #list in a list
+        x1,y1,x2,y2 = robot.xcor(),-robot.ycor(),robot.xcor(),-robot.ycor()
+        robotBoundingBox = 10
+
+        #canvas.create_rectangle(x1,y1-10,x1+robotBoundingBox,y1+robotBoundingBox,fill='yellow',) #bounding box for robot
+        Obx1,Oby1,Obx2,Oby2= (-400+(coordinates[1]*50)),-225+(coordinates[0]*50),-300+(coordinates[1]*50),-125+(coordinates[0]*50)
+        obstacleBoundingBox = 100
+
+        #canvas.create_rectangle(Obx1,Oby1,Obx1+obstacleBoundingBox,Oby1+obstacleBoundingBox,fill='purple') #bounding box for obstacles
+        if (x1 < Obx1 + obstacleBoundingBox) and  (x1 + robotBoundingBox > Obx1) and (y1 < Oby1 + obstacleBoundingBox) and (y1+robotBoundingBox > Oby1):
+            return True #collision has occured
+        else:
+            return False
+
 def initRobot():
 
     robot1.reset()
@@ -94,12 +265,24 @@ def initRobot():
     robot1.penup()
     robot2.penup()
 
-def changeDifficulty(difficulty):
-    global currentDifficulty
-    currentDifficulty = difficulty
-    print currentDifficulty
+def createObstacle(row, column, colour='black'):
+    obstacles = []
+    
+    if row in rows:
+        x = row
+        obstacles.append(x)
+    if column in columns:
+        c = column
+        obstacles.append(c)
+
+    if c and x:
+        objectsInArena.append(canvas.create_rectangle(-400+(c*50),-225+(x*50),-301+(c*50),-126+(x*50), fill='black',outline='black'))
+        objectsInArena.append(obstacles)
+    else:
+        print 'No coordinates to place the obstacle to.'
 
 def hasRobotTimedOut(): #function also updates timer
+    global simulationRunning
     global startTime
     global countdownTime
 
@@ -111,9 +294,9 @@ def hasRobotTimedOut(): #function also updates timer
     countdownTime.set(tempStrToShorten) #updating the label
 
     if (runningTime > 30.0):
-        return True
+        simulationRunning = False
     else:
-        return False
+        simulationRunning = True
 
 def detectAndAvoidEdges(robot):
     #makes sure the robot does not travel off the edge of the screen
@@ -146,39 +329,21 @@ def detectAndAvoidEdges(robot):
         randomHeading = random.randint(-45,45)
         robot.seth(randomHeading)
 
-def createObstacle(row=1, column=1, colour='purple'):
-    obstacles = []
-    x, c = row, column
-    
-    if row in rows and column in columns:
-        x = row
-        c = column
-        obstacles.append(x)
-        obstacles.append(c)
-    if c and x:
-        objectsInArena.append(canvas.create_rectangle(-400+(c*50),-225+(x*50),-301+(c*50),-126+(x*50), fill=colour))
-        objectsInArena.append(obstacles)
-    else:
-        print 'No coordinates to place the obstacle to.'
-
-def trafficLight(row=1, column=1, colour='red'):
+def trafficLight(row, column, colour='red'):
     trafficLight = []
-    x, c = row, column
     
-    if row in rows and column in columns:
+    if row in rows:
         x = row
-        c = column
         trafficLight.append(x)
+    if column in columns:
+        c = column
         trafficLight.append(c)
+
     if c and x:
         objectsInArena.append(canvas.create_oval(-400+(c*50),-225+(x*50),-301+(c*50),-126+(x*50), fill=colour))
         objectsInArena.append(trafficLight)
     else:
         print 'No coordinates to place the light to.'
-
-def complexObjectDetection(robot):
-    print 'tbc'
-    #compare to list of 
 
 def robotCollisionDetection(robot1,robot2):
     #uses bounding circles as accuracy is not paramount
@@ -202,6 +367,50 @@ def robotCollisionDetection(robot1,robot2):
 def randomArenaGeneration():
     global objectsInArena
     print 'tbc'
+
+def generateIntermediateArena():
+    global mapGrid
+
+    for c in range(0,15):
+        for x in range(0,8):
+            canvas.create_rectangle(-400+(c*50),-225+(x*50),-301+(c*50),-126+(x*50),outline='black')
+
+    createObstacle(1,2)
+    createObstacle(1,3)
+    createObstacle(3,6)
+    createObstacle(2,12)
+    createObstacle(4,12)
+    createObstacle(6,12)
+    createObstacle(1,9)
+    createObstacle(5,9)
+    createObstacle(5,1)
+    createObstacle(6,4)
+    createObstacle(6,5)
+
+    #0:empty node
+    #1:obstacle
+    #2:ending node
+    #3:visited node
+
+                #[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
+                #[0,1,1,1,1,0,0,0,0,1,1,0,0,0,0,0],
+                #[0,0,1,1,1,0,0,0,0,1,1,0,1,1,0,0],
+                #[0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0],
+                #[0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0],
+                #[0,1,1,0,0,0,0,0,0,1,1,0,1,1,0,0],
+                #[0,1,1,0,1,1,1,0,0,1,1,0,1,1,0,0],
+                #[0,0,0,0,1,1,1,0,0,0,0,0,1,1,0,0],
+                #[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2]
+
+                #[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
+                #[0,0,0,0,1,1,1,0,0,0,0,0,1,1,0,0],
+                #[0,1,1,0,1,1,1,0,0,1,1,0,1,1,0,0],
+                #[0,1,1,0,0,0,0,0,0,1,1,0,1,1,0,0],
+                #[0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0],
+                #[0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0],
+                #[0,0,1,1,1,0,0,0,0,1,1,0,1,1,0,0],
+                #[0,0,1,1,1,0,0,0,0,1,1,0,0,0,0,0],
+                #[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
 #Will's code
 
@@ -272,6 +481,11 @@ def move_around_square():
     elif object_location_right == True:
         turtle.left(90)
 
+def changeDifficulty(difficulty):
+    global currentDifficulty
+    currentDifficulty = difficulty
+    print currentDifficulty
+
 def basicArena():
     global objectsInArena
 
@@ -325,7 +539,21 @@ def basicArena():
             robot1.fd(traceback)
 
 def intermediateArena():
-    print 'tbc'
+
+    robot1.clear()
+    robot1.st()
+    robot1.shape('square')
+
+    robot1.speed(0)
+    robot1.pu()
+
+    robot1.speed(1)
+    generateIntermediateArena()
+
+    b = AStar()
+    b.init_grid()
+    b.algorithm()
+
 
 def complexArena():
     robot1.clear()
@@ -373,11 +601,13 @@ def complexArena():
 
 def clearArena():
     global objectsInArena
+
     print objectsInArena
 
     for x in range(0,len(objectsInArena)):
         canvas.delete(objectsInArena[x])
 
+    objectsInArena = []
 
 def changeTimescale(timescale):
     global startTime
