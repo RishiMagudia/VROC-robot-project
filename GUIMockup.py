@@ -179,7 +179,12 @@ class AStar(object):
 
             
 
-        
+""" 
+    Here I tried to use the LightID to get the coordinates of the lights directly from the canvas.
+    c1 is the X's and c2 the Y's.
+    the *cc has the asterix to unpack the list's variables, so we can use it in the range() function
+    
+"""
 ##        for i in LightID:
 ##            r = random.randint(1,5)
 ##            cc = canvas.coords(i)
@@ -195,12 +200,18 @@ class AStar(object):
 ##                c2 = (cc[3] - cc[1])+cc[1]
 ##            co = [c1, c2]
 ##            print 'co', co
-##            if robot1.xcor() in range(*cc) and robot1.ycor() in range(*cc):
+##            if robot1.xcor() in range(*co) and robot1.ycor() in range(*co):
 ##                print 'robot pos=', robot1.pos()
 ##                print 'traffic pos =', canvas.coords(i)
 ##                print 'traffic light, sleeping for ', r,'seconds'
 ##                time.sleep(r)
 
+
+"""
+    These are the exact coordinate for the lights. Tried to compare them as a range, but range doesn't take in floats.
+    Constructing a custom range function, didn't make a difference. Hardcoded coordinates only work for tbc3, that's 
+    the top right light.
+"""
 ##        [-250.00000000000003, 75.0, -200.00000000000003, 125.00000000000001]
 ##        [150.0, -125.00000000000001, 200.00000000000003, -75.0]
 ##        [150.0, 25.000000000000004, 200.00000000000003, 75.0]
