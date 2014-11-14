@@ -21,6 +21,7 @@ simulationRunning = False
 startTime = 0
 currentDifficulty = ''
 objectsInArena = []
+LightID = []
 countdownTime = StringVar()
 object_location_left = False
 object_location_right = False
@@ -135,14 +136,83 @@ class AStar(object):
             #canvas.create_rectangle(-400+(node.x*50),225-(node.y*50),-350+(node.x*50),175-(node.y*50),fill='yellow')
             self.traverse_path(node.x,node.y)
 
-        print 'tbc'
         #self.start = self.get_node(temp[0],temp[1])
         #self.end_point = [temp[0],temp[1]] #for robot
 
     def traverse_path(self,x,y):
         robot1.goto(-375+(x*50),-200+(y*50))
         hasRobotTimedOut()
-        print robot1.pos()
+        #detect traffic light colour here
+        print ''
+        print 'robot pos=', robot1.pos()
+
+        for i in trafficLights:
+            r = random.randint(1,5)
+            x, c = i
+            Obx1 = -400+(x*50)
+            Oby1 = -225+(c*50)
+            Obx2 = -350+(x*50)
+            Oby2 = -175+(c*50)
+            
+            #Object ahead of robot
+            if robot1.ycor() >(Oby1)and robot1.ycor()<(Obx1) and robot1.xcor()>Obx1 and robot1.xcor()<Obx2:
+                print 'object ahead'
+                time.sleep(2)
+
+            #Object left of robot
+            if robot1.xcor() < (Obx2) and robot1.xcor() > (Obx2) and robot1.ycor() > Oby1 and robot1.ycor() < Oby2:
+                print 'left'
+                time.sleep(2)
+
+            #Object right of robot
+            if robot1.xcor() > (Obx1) and robot1.xcor() < (Obx1) and robot1.ycor() > Oby1 and robot1.ycor() < Oby2:
+                print 'right'
+                time.sleep(2)
+            
+            #Top of obstacle
+            if robot1.ycor()>(Oby2) and (robot1.xcor()>Obx2 or robot1.xcor()<Obx1):
+                print "Object detected top of object"
+                time.sleep(2)
+
+            else:
+                print 'No Object detected'
+
+            
+
+        
+##        for i in LightID:
+##            r = random.randint(1,5)
+##            cc = canvas.coords(i)
+##            c1, c2 = 0, 0
+##            print 'cc', cc
+##            if cc[0] > cc[2]:
+##                c1 = (cc[0] - c[2])+cc[0]
+##            else:
+##                c1 = (cc[2] - cc[0])+cc[0]
+##            if cc[1] > cc[3]:
+##                c2 = (cc[1] - cc[3])+cc[1]
+##            else:
+##                c2 = (cc[3] - cc[1])+cc[1]
+##            co = [c1, c2]
+##            print 'co', co
+##            if robot1.xcor() in range(*cc) and robot1.ycor() in range(*cc):
+##                print 'robot pos=', robot1.pos()
+##                print 'traffic pos =', canvas.coords(i)
+##                print 'traffic light, sleeping for ', r,'seconds'
+##                time.sleep(r)
+
+##        [-250.00000000000003, 75.0, -200.00000000000003, 125.00000000000001]
+##        [150.0, -125.00000000000001, 200.00000000000003, -75.0]
+##        [150.0, 25.000000000000004, 200.00000000000003, 75.0]
+##        if (robot1.xcor() == -225 and robot1.ycor() == 100):
+##            print 'tbc1'
+##            time.sleep(5)
+##        if (robot1.xcor() == 175 and robot1.ycor() == -100):
+##            print 'tbc2'
+##            time.sleep(5)
+##        if (robot1.xcor() == 175 and robot1.ycor() == 50):
+##            print 'tbc3'
+##            time.sleep(5)
 
     def compare(self, node1, node2):
         """
@@ -330,14 +400,15 @@ def detectAndAvoidEdges(robot):
         robot.seth(randomHeading)
 
 def trafficLight(row, column, colour='red'):
-    trafficLight = []
-    
-    if row in rows:
-        x = row
-        trafficLight.append(x)
-    if column in columns:
-        c = column
-        trafficLight.append(c)
+    x, c = row, column
+##    if row in rows:
+##        x = row
+##        trafficLights.append(x)
+##    if column in columns:
+##        c = column
+##        trafficLights.append(c)
+    lights = [x,c]
+    trafficLights.append(lights)
 
     if c and x:
         objectsInArena.append(canvas.create_oval(-400+(c*50),-225+(x*50),-301+(c*50),-126+(x*50), fill=colour))
@@ -386,31 +457,6 @@ def generateIntermediateArena():
     createObstacle(5,1)
     createObstacle(6,4)
     createObstacle(6,5)
-
-    #0:empty node
-    #1:obstacle
-    #2:ending node
-    #3:visited node
-
-                #[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,],
-                #[0,1,1,1,1,0,0,0,0,1,1,0,0,0,0,0],
-                #[0,0,1,1,1,0,0,0,0,1,1,0,1,1,0,0],
-                #[0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0],
-                #[0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0],
-                #[0,1,1,0,0,0,0,0,0,1,1,0,1,1,0,0],
-                #[0,1,1,0,1,1,1,0,0,1,1,0,1,1,0,0],
-                #[0,0,0,0,1,1,1,0,0,0,0,0,1,1,0,0],
-                #[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2]
-
-                #[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
-                #[0,0,0,0,1,1,1,0,0,0,0,0,1,1,0,0],
-                #[0,1,1,0,1,1,1,0,0,1,1,0,1,1,0,0],
-                #[0,1,1,0,0,0,0,0,0,1,1,0,1,1,0,0],
-                #[0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0],
-                #[0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0],
-                #[0,0,1,1,1,0,0,0,0,1,1,0,1,1,0,0],
-                #[0,0,1,1,1,0,0,0,0,1,1,0,0,0,0,0],
-                #[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
 #Will's code
 
