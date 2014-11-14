@@ -21,6 +21,7 @@ simulationRunning = False
 startTime = 0
 currentDifficulty = ''
 objectsInArena = []
+trafficLights = []
 LightID = []
 countdownTime = StringVar()
 object_location_left = False
@@ -179,12 +180,12 @@ class AStar(object):
 
             
 
-""" 
-    Here I tried to use the LightID to get the coordinates of the lights directly from the canvas.
-    c1 is the X's and c2 the Y's.
-    the *cc has the asterix to unpack the list's variables, so we can use it in the range() function
-    
-"""
+    """ 
+        Here I tried to use the LightID to get the coordinates of the lights directly from the canvas.
+        c1 is the X's and c2 the Y's.
+        the *cc has the asterix to unpack the list's variables, so we can use it in the range() function
+        
+    """
 ##        for i in LightID:
 ##            r = random.randint(1,5)
 ##            cc = canvas.coords(i)
@@ -207,11 +208,11 @@ class AStar(object):
 ##                time.sleep(r)
 
 
-"""
-    These are the exact coordinate for the lights. Tried to compare them as a range, but range doesn't take in floats.
-    Constructing a custom range function, didn't make a difference. Hardcoded coordinates only work for tbc3, that's 
-    the top right light.
-"""
+    """
+        These are the exact coordinate for the lights. Tried to compare them as a range, but range doesn't take in floats.
+        Constructing a custom range function, didn't make a difference. Hardcoded coordinates only work for tbc3, that's 
+        the top right light.
+    """
 ##        [-250.00000000000003, 75.0, -200.00000000000003, 125.00000000000001]
 ##        [150.0, -125.00000000000001, 200.00000000000003, -75.0]
 ##        [150.0, 25.000000000000004, 200.00000000000003, 75.0]
@@ -225,9 +226,11 @@ class AStar(object):
 ##            print 'tbc3'
 ##            time.sleep(5)
 
+
     def compare(self, node1, node2):
         """
         Compare 2 nodes F values
+        
 
         @param node1 1st node
         @param node2 2nd node
@@ -422,10 +425,15 @@ def trafficLight(row, column, colour='red'):
     trafficLights.append(lights)
 
     if c and x:
-        objectsInArena.append(canvas.create_oval(-400+(c*50),-225+(x*50),-301+(c*50),-126+(x*50), fill=colour))
-        objectsInArena.append(trafficLight)
+        circ = canvas.create_oval(-400+(x*50),-225+(c*50),-350+(x*50),-175+(c*50), fill=colour)
+        objectsInArena.append(circ)
+        LightID.append(circ)
+        objectsInArena.append(trafficLights)
     else:
         print 'No coordinates to place the light to.'
+
+def getLightColour(lightID):
+    return  canvas.itemcget(lightID, fill)
 
 def robotCollisionDetection(robot1,robot2):
     #uses bounding circles as accuracy is not paramount
@@ -452,7 +460,7 @@ def randomArenaGeneration():
 
 def generateIntermediateArena():
     global mapGrid
-
+    
     for c in range(0,15):
         for x in range(0,8):
             canvas.create_rectangle(-400+(c*50),-225+(x*50),-301+(c*50),-126+(x*50),outline='black')
@@ -468,6 +476,9 @@ def generateIntermediateArena():
     createObstacle(5,1)
     createObstacle(6,4)
     createObstacle(6,5)
+    trafficLight(3,6)
+    trafficLight(11,2)
+    trafficLight(11,5)
 
 #Will's code
 
