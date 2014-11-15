@@ -23,6 +23,8 @@ currentDifficulty = ''
 objectsInArena = []
 trafficLights = []
 LightID = []
+isLight = True
+isLightGreen = True
 countdownTime = StringVar()
 object_location_left = False
 object_location_right = False
@@ -146,37 +148,34 @@ class AStar(object):
         #detect traffic light colour here
         print ''
         print 'robot pos=', robot1.pos()
+##        c, x = 2, 2
+##        m = -400+(x*50),-225+(c*50),-350+(x*50),-175+(c*50)
+##        print m
+        #converts robot1.pos() into rows and columns
+        mReversed = ((robot1.xcor()+400)/50, (robot1.ycor()+225)/50)
+        print 'robot pos(x,y) = ',mReversed
 
-        for i in trafficLights:
-            r = random.randint(1,5)
-            x, c = i
-            Obx1 = -400+(x*50)
-            Oby1 = -225+(c*50)
-            Obx2 = -350+(x*50)
-            Oby2 = -175+(c*50)
-            
-            #Object ahead of robot
-            if robot1.ycor() >(Oby1)and robot1.ycor()<(Obx1) and robot1.xcor()>Obx1 and robot1.xcor()<Obx2:
-                print 'object ahead'
-                time.sleep(2)
+        #50/50 change of being green or red
+        rndTick = random.randint(1,1000)
+        if rndTick < 500:
+            for i in LightID:
+                canvas.itemconfig(i, fill="green")
+            isGreen = True
+        else:
+            for i in LightID:
+                canvas.itemconfig(i, fill="red")
+            isGreen = False
 
-            #Object left of robot
-            if robot1.xcor() < (Obx2) and robot1.xcor() > (Obx2) and robot1.ycor() > Oby1 and robot1.ycor() < Oby2:
-                print 'left'
-                time.sleep(2)
-
-            #Object right of robot
-            if robot1.xcor() > (Obx1) and robot1.xcor() < (Obx1) and robot1.ycor() > Oby1 and robot1.ycor() < Oby2:
-                print 'right'
-                time.sleep(2)
-            
-            #Top of obstacle
-            if robot1.ycor()>(Oby2) and (robot1.xcor()>Obx2 or robot1.xcor()<Obx1):
-                print "Object detected top of object"
-                time.sleep(2)
-
+        #compares column and row of the robot to the lights
+        #checks for the isGreen boolean
+        if mReversed in trafficLights:
+            xr = random.randint(1, 6)
+            if isGreen == False:
+                print "Hit a red light, waiting for", xr, "seconds."
+                time.sleep(xr)
             else:
-                print 'No Object detected'
+                print "Hit a green light, continuing."
+                
 
             
 
@@ -421,7 +420,7 @@ def trafficLight(row, column, colour='red'):
 ##    if column in columns:
 ##        c = column
 ##        trafficLights.append(c)
-    lights = [x,c]
+    lights = (x,c+1)
     trafficLights.append(lights)
 
     if c and x:
@@ -433,7 +432,7 @@ def trafficLight(row, column, colour='red'):
         print 'No coordinates to place the light to.'
 
 def getLightColour(lightID):
-    return  canvas.itemcget(lightID, fill)
+    return  canvas.itemcget(lightID, "fill")
 
 def robotCollisionDetection(robot1,robot2):
     #uses bounding circles as accuracy is not paramount
@@ -476,7 +475,6 @@ def generateIntermediateArena():
     createObstacle(5,1)
     createObstacle(6,4)
     createObstacle(6,5)
-    trafficLight(3,6)
     trafficLight(11,2)
     trafficLight(11,5)
 
@@ -621,6 +619,7 @@ def intermediateArena():
     b = AStar()
     b.init_grid()
     b.algorithm()
+    print 'Reached end of line.'
 
 
 def complexArena():
@@ -670,12 +669,15 @@ def complexArena():
 def clearArena():
     global objectsInArena
 
-    print objectsInArena
+    #print objectsInArena
 
     for x in range(0,len(objectsInArena)):
         canvas.delete(objectsInArena[x])
-
+    trafficLights = []
+    LightID = []
     objectsInArena = []
+    path = []
+    currentDifficulty = ''
 
 def changeTimescale(timescale):
     global startTime
