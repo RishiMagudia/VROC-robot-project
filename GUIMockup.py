@@ -21,9 +21,7 @@ startTime = 0
 currentDifficulty = ''
 objectsInArena = []
 countdownTime = StringVar()
-object_location_left = False
-object_location_right = False
-robot_on_main_line = False
+object_right = False
 
 
 robot1 = turtle.RawTurtle(canvas)
@@ -50,21 +48,22 @@ def calculateMainLine(startcood,endcood):
 
 def scanner(robot,obstacle): #needs editing to match functions
     Obx1,Oby1,Obx2,Oby2=canvas.coords(obstacle)
-    #print Obx1,Oby1,Obx2,Oby2
     #print robot.pos()
+    
 
     #Object ahead of robot
-    if robot.ycor() >(Oby1-40)and robot.ycor()<(Obx1+40) and robot.xcor()>Obx1 and robot.xcor()<Obx2:
+    if robot.ycor() > -(Oby2+15) and robot.ycor() < -(Oby2) and robot.xcor()>Obx1 and robot.xcor()<Obx2:
         #print 'object ahead'
         return 'ahead'
+    
 
     #Object left of robot
-    if robot.xcor() < (Obx2+40) and robot.xcor() > (Obx2-40) and robot.ycor() > Oby1 and robot.ycor() < Oby2:
+    if robot.xcor() < (Obx2+5) and robot.xcor() > (Obx2-5) and robot.ycor() > Oby1 and robot.ycor() < Oby2:
         #print 'left'
         return 'left'
 
     #Object right of robot
-    if robot.xcor() > (Obx1-40) and robot.xcor() < (Obx1+40) and robot.ycor() > Oby1 and robot.ycor() < Oby2:
+    if robot.xcor() > (Obx1-15) and robot.xcor() < (Obx1+15) and robot.ycor() > Oby1 and robot.ycor() < Oby2:
         #print 'right'
         return 'right'
     
@@ -205,124 +204,90 @@ def randomArenaGeneration():
 
 #Will's code
 
-def detect():
-    global object_location_left
-    global object_location_right
-    if scanner(robot, obstacle) == 'left':
-        object_location_left = True
-        object_location_right = False
-    elif scanner(robot, obsatacle) == 'right':
-        object_location_right = True
-        object_location_left = False
-        return object_location_left, object_location_right 
-        
-#The robot moves along the squares side until it is clear of the object. Then
-#using the variables defined earlier, the robot turns the corner. The robot then
-#moves forward so that the scanner can detect the next square side.
-
-def move_along_side():
-    global object_location_left
-    global object_location_right
-    scanner(robot,obstacle)
-    while scanner(robot,obstacle) == 'left' or scanner == 'right':
-        turtle.forward(1)
-        scanner(robot,obstacle)
-    turtle.forward(4)
-    if object_location_left == True:
-        turtle.left(90)
-    elif object_location_right == True:
-        turtle.right(90)
-    turtle.forward(6)
-
-#The robot gradient and Y-intercept are defined
-
-def robot_line(robot):
-    robot_Gradient = float((robot.ycor)/(robot.xcor))
-    robot_Y_Intercept = float((robot.ycor)/(robot.xcor)*(robot_Gradient))
-    return robot_gradient, robot_Y_Intercept
-
-#The robot gradient and Y-intercept are cross-refrenced with the mainline's. If
-#they match, the loop ends.
-
-def is_robot_on_main_line(robot,startcood,endcood):
-    global robot_on_mainline
-    calculateMainLine(startcood,endcood)
-    robot_line(robot)
-    if calculateMainline(startcood,endcood) == robot_line(robot):
-        robot_on_mainline = True
-    return robot_on_mainline
-        
-def move_around_square():
-    global robot_on_mainline
-    global object_location_left
-    global object_location_right
-    detect()
-    move_along_side()    
-    detect()
-    move_along_side()
-    #robot sees if it's on the mainline, and moves forward if not.
-    is_robot_on_main_line(robot,startcood,endcood)
-    while robot_on_mainline == False:
-        turtle.forward(1)
-        is_robot_on_main_line(robot,startcood,endcood)
-    #robot moves back in line, with the mainline
-    detect()
-    if object_location_left == True:
-        turtle.right(90)
-    elif object_location_right == True:
-        turtle.left(90)
-
 def basicArena():
+    #global variable preset by peer
     global objectsInArena
-
-    traceback = 0
-    robot1.clear()
-    robot1.st()
-    robot2.ht()
     
     #Setting up where the robot is
-    robot1.speed(0)
-    robot1.seth(90)
+
+    traceback = 0
+
+    robot1.clear()
+    robot1.ht()
     robot1.pu()
-    robot1.setpos(0,-150)
-    robot1.speed(1)
-
-    #get the direction
-    dirs = [0, 180]
-    direction = random.choice(dirs)
-    dirs.remove(direction)
+    robot1.setpos(-10, 0)
+    robot1.seth(90)
+    robot1.st()
     
-    #setting up the obstacle
-    basicObstacle = canvas.create_rectangle(-50,-50,50,50)
-    objectsInArena.append(basicObstacle)
+    
+    #setting up the obstacles
+    basic_obstacle1 = canvas.create_rectangle(-20, -20, 0, -40, fill = "blue")
+    objectsInArena.append(basic_obstacle1)
+    basic_obstacle2 = canvas.create_rectangle(-30, -100, 10 , -140, fill = "green")   
+    objectsInArena.append(basic_obstacle2)    
 
-    while robot1.ycor() < 180:
 
-        hasRobotTimedOut()
+    #setting up a traceback for later
+    traceback = 0
 
-        if scanner(robot1,basicObstacle) == 'No object detected':
-            hasRobotTimedOut()
-            robot1.seth(90)
-            robot1.fd(10)
+##    #setting up a timer untill the robot begins
+##    for time_to_go in [3, 2, 1]:
+##        print time_to_go, "seconds till we begin!"
+##        time.sleep(1)
+##        print "Go!"
 
-        if scanner(robot1,basicObstacle) == 'ahead':
-            hasRobotTimedOut()
-            robot1.seth(direction)
-            robot1.fd(10)
-            traceback += 10
-            
-        if scanner(robot1,basicObstacle) == 'left':
-            hasRobotTimedOut()
-            robot1.fd(10)
-            
-        if scanner(robot1,basicObstacle) == 'right':
-            hasRobotTimedOut()
-            robot1.fd(10)
-            
-        if scanner(robot1,basicObstacle) == 'top':
-            hasRobotTimedOut()
-            robot1.seth(dirs[0])
-            robot1.fd(traceback)
+    
+
+    #robot will loop until it it's coordinates match the end points
+    while robot1.pos() != (-10, 200):
+        robot1.forward(1)
+        for objectsInArena_list in objectsInArena: #create for loop so that each object is individualy scanned
+            if scanner(robot1, objectsInArena_list) == "ahead": #calling function to scan if object in proximety of turtle. Function created by peer
+                robot1.left(90) #trobot turns in order to travel along the side
+
+                #robot travel along side until it is clear of object, whilst keeping a traceback. It then rounds the corner
+                while scanner(robot1, objectsInArena_list) == "ahead":
+                    robot1.forward(1)
+                    traceback += 1
+                robot1.forward(15)
+                robot1.right(90)
+                robot1.forward(15)
+
+                
+                #robot travels along side
+
+                robot1.forward(traceback)
+                robot1.forward(traceback)
+                
+                
+                
+                #robot turns corner
+
+                robot1.forward(15)
+                robot1.right(90)
+                robot1.forward(15)
+
+                #robot travel back to main line
+                
+                robot1.forward(traceback)
+                robot1.left(90)
+                traceback = 0
+                    
+        
+                
+        
+        
+        
+        
+
+    
+
+    print "Program finished"
+
+    
+    
+
+    
 
 def intermediateArena():
     print 'tbc'
